@@ -104,7 +104,7 @@ def preguntar_gemini(prompt: str) -> dict:
                 headers={"Content-Type": "application/json", "x-goog-api-key": clave},
             )
             try:
-                with urllib.request.urlopen(req, timeout=120) as r:
+                with urllib.request.urlopen(req, timeout=90) as r:
                     respuesta = json.loads(r.read())
                 print(f"Modelo usado: {modelo}\n")
                 texto = respuesta["candidates"][0]["content"]["parts"][0]["text"]
@@ -120,6 +120,16 @@ def preguntar_gemini(prompt: str) -> dict:
                     print(f"[{modelo}] no disponible, probando el siguiente modelo...")
                     break   # pasa al modelo de respaldo
                 raise SystemExit(ultimo_error)  # 400/401/403: no tiene caso reintentar
+            except (TimeoutError, urllib.error.URLError) as e:
+                # Gemini no contestó a tiempo o falló la conexión: igual que saturado
+                ultimo_error = f"Sin respuesta de Gemini ({modelo}): {e}"
+                if intento < REINTENTOS:
+                    print(f"[{modelo}] sin respuesta, reintento {intento}/{REINTENTOS - 1} en {espera}s...")
+                    time.sleep(espera)
+                    espera *= 2
+                    continue
+                print(f"[{modelo}] no disponible, probando el siguiente modelo...")
+                break
     raise SystemExit(f"Ningún modelo respondió. Último error:\n{ultimo_error}")
 
 
@@ -216,7 +226,12 @@ if __name__ == "__main__":
         print("Reusando respuesta guardada de Gemini\n")
     else:
         titulares = "\n".join(f"[{i}] ({n['fuente']}) {n['titulo']}" for i, n in enumerate(notas))
-        datos = preguntar_gemini(PROMPT.format(plaza=PLAZA, actor=ACTOR, titulares=titulares))
+        try:
+            datos = preguntar_gemini(PROMPT.format(plaza=PLAZA, actor=ACTOR, titulares=titulares))
+        except SystemExit as fallo:
+            enviar_telegram(f"⚠️ El corte de {PLAZA} de hoy no se generó: Gemini no respondió. "
+                            f"Se recolectaron {len(notas)} notas. Revisa GitHub Actions.")
+            raise fallo
         ruta_resp.write_text(json.dumps(datos, ensure_ascii=False, indent=2), encoding="utf-8")
 
     corte = armar_corte(datos, notas)
