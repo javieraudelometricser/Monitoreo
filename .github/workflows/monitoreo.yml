@@ -1,0 +1,29 @@
+name: Monitoreo CDMX
+
+on:
+  schedule:
+    - cron: "0 22 * * *"   # 22:00 UTC = 16:00 CDMX
+  workflow_dispatch:        # permite correrlo a mano desde la pestaña Actions
+
+jobs:
+  corte:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TZ: America/Mexico_City
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Recolectar Google News
+        run: python recolector_gnews.py
+
+      - name: Resumir y enviar a Telegram
+        run: python resumen.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
