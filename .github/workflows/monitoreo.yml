@@ -2,7 +2,7 @@ name: Monitoreo CDMX
 
 on:
   schedule:
-    - cron: "0 22 * * *"   # 22:00 UTC = 16:00 CDMX
+       - cron: "40 20 * * *"   # 20:40 UTC = 14:40 CDMX, para que llegue ~15:00
   workflow_dispatch:        # permite correrlo a mano desde la pestaña Actions
 
 jobs:
