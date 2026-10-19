@@ -29,7 +29,7 @@ from pathlib import Path
 # ---------- CONFIGURACIÓN ----------
 PLAZA = "CDMX"
 ACTOR = "Clara Brugada"
-HORA_CORTE = "16:00"
+HORA_CORTE = "15:00"
 MAX_TEMAS = 5
 MAX_ALERTAS = 3
 MODELOS = ["gemini-flash-latest", "gemini-flash-lite-latest"]  # en orden; el 2o es respaldo
