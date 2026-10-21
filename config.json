@@ -1,0 +1,28 @@
+{
+  "plaza": "CDMX",
+  "hora_corte": "15:00",
+  "marca": {
+    "id": "marca",
+    "nombre": "Clara Brugada",
+    "busquedas": ["\"Clara Brugada\"", "\"Gobierno de la CDMX\""]
+  },
+  "adversarios": [
+    {"id": "rojo", "nombre": "Alessandra Rojo de la Vega", "busquedas": ["\"Alessandra Rojo de la Vega\""]},
+    {"id": "tabe", "nombre": "Mauricio Tabe", "busquedas": ["\"Mauricio Tabe\""]},
+    {"id": "taboada", "nombre": "Santiago Taboada", "busquedas": ["\"Santiago Taboada\""]},
+    {"id": "orvananos", "nombre": "Carlos Orvañanos", "busquedas": ["\"Carlos Orvañanos\""]}
+  ],
+  "ciudad": {
+    "id": "ciudad",
+    "nombre": "CDMX",
+    "busquedas": ["\"Ciudad de México\"", "CDMX"]
+  },
+  "limites": {"temas_marca": 3, "temas_adversario": 1, "temas_ciudad": 3, "alertas": 3},
+  "umbrales": {
+    "dias_promedio": 7,
+    "dias_minimos_historial": 5,
+    "veces_promedio_fuego": 2,
+    "notas_minimas_fuego": 3,
+    "dias_sin_menciones_nuevo": 5
+  }
+}
