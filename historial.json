@@ -78,5 +78,13 @@
     "orvananos": 0,
     "marca": 116,
     "ciudad": 179
+  },
+  "2026-10-30": {
+    "rojo": 100,
+    "tabe": 6,
+    "taboada": 2,
+    "orvananos": 1,
+    "marca": 112,
+    "ciudad": 191
   }
 }
